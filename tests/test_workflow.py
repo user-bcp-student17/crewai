@@ -45,6 +45,15 @@ class WorkflowTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 include_data()
 
+    def test_integrated_role_keeps_upstream_implementation_guidance(self):
+        tasks = build_tasks(FEATURE)
+        instructions = tasks["ai-engineer"].description
+        for expected in ("Quarkus", "Angular", "parametriza", "autorización",
+                         "carga", "navegación por teclado", "no inventes ejecuciones"):
+            self.assertIn(expected, instructions)
+        self.assertIn("AI Engineer", tasks["chapter"].description)
+        self.assertNotIn("Backend, Frontend", tasks["chapter"].description)
+
     def test_data_retry_rejection_and_resume_keep_human_gate(self):
         self.check_pipeline(True, interrupt_data=True)
 
